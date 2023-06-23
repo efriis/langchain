@@ -1,24 +1,21 @@
-import importlib
-import json
-import os
+import urllib.request
 from pathlib import Path
 from typing import Any, Dict, Optional
 
 from langchain.load.load import loads
 from langchain.load.serializable import Serializable
+from langchain.utils import get_from_dict_or_env
 
-HUB_BASE_URL = "http://localhost:3000/"
+HUB_KEY="hub_base_url"
+HUB_ENV_KEY="HUB_BASE_URL"
+HUB_DEFAULT = "http://localhost:3000/"
 
+MAIN_BRANCH = "main"
+OBJECT_PATH = "object.lc.json"
 
-def _hub_url_from_path(path: str) -> str:
-    url = HUB_BASE_URL + path + "/raw/branch/main/object.json"
-    return url
-
-import urllib.request
-
-
-def load_from_hub(path: str, *, secrets_map: Optional[Dict[str, str]] = None) -> Any:
-    url = _hub_url_from_path(path)
+def load_from_hub(path: str, ref: str = MAIN_BRANCH, *, secrets_map: Optional[Dict[str, str]] = None, **kwargs) -> Any:
+    hub_base_url = get_from_dict_or_env(kwargs, HUB_KEY, HUB_ENV_KEY, HUB_DEFAULT)
+    url = f"{hub_base_url}{path}/raw/branch/{ref}/{OBJECT_PATH}"
 
     # TODO(erick): handle errors
     with urllib.request.urlopen(url) as response:
