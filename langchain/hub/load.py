@@ -6,14 +6,19 @@ from langchain.load.load import loads
 from langchain.load.serializable import Serializable
 from langchain.utils import get_from_dict_or_env
 
-HUB_KEY="hub_base_url"
-HUB_ENV_KEY="HUB_BASE_URL"
-HUB_DEFAULT = "http://localhost:3000/"
+HUB_KEY = "hub_base_url"
+HUB_ENV_KEY = "HUB_BASE_URL"
+HUB_DEFAULT = "http://localhost:4000/"
+
+HUB_API_KEY_KEY = "chainhub_api_key"
+HUB_API_KEY_ENV_KEY = "CHAINHUB_API_KEY"
 
 MAIN_BRANCH = "main"
 OBJECT_PATH = "object.lc.json"
 
-def load_from_hub(path: str, ref: str = MAIN_BRANCH, *, secrets_map: Optional[Dict[str, str]] = None, **kwargs) -> Any:
+
+
+def download(path: str, ref: str = MAIN_BRANCH, *, secrets_map: Optional[Dict[str, str]] = None, **kwargs) -> Any:
     hub_base_url = get_from_dict_or_env(kwargs, HUB_KEY, HUB_ENV_KEY, HUB_DEFAULT)
     url = f"{hub_base_url}{path}/raw/branch/{ref}/{OBJECT_PATH}"
 
@@ -21,3 +26,6 @@ def load_from_hub(path: str, ref: str = MAIN_BRANCH, *, secrets_map: Optional[Di
     with urllib.request.urlopen(url) as response:
         content = response.read().decode()
         return loads(content, secrets_map=secrets_map)
+
+def upload(obj: Serializable, path: str, ref: str = MAIN_BRANCH, *, secrets_map: Optional[Dict[str, str]] = None, **kwargs) -> None:
+    pass
