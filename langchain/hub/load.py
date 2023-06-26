@@ -26,6 +26,3 @@ def download(path: str, ref: str = MAIN_BRANCH, *, secrets_map: Optional[Dict[st
     with urllib.request.urlopen(url) as response:
         content = response.read().decode()
         return loads(content, secrets_map=secrets_map)
-
-def upload(obj: Serializable, path: str, ref: str = MAIN_BRANCH, *, secrets_map: Optional[Dict[str, str]] = None, **kwargs) -> None:
-    pass
