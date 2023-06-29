@@ -46,7 +46,7 @@ def upload(object: Serializable, owner: str, repo: str, upsert: bool = False, *,
     existing_file = api.get_repo_file(owner, repo, OBJECT_PATH)
 
     # content
-    content = dumps(object).encode()
+    content = dumps(object, pretty=True).encode()
 
     # if not, create it with file contents
     if existing_file is None:
