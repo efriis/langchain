@@ -48,7 +48,6 @@ class HubApi():
         data = None
         if body:
             data = json.dumps(body).encode()
-        print(method, url, data)
         req = urllib.request.Request(url, headers=self.headers, method=method, data=data)
         with urllib.request.urlopen(req) as response:
             content = response.read().decode()
@@ -98,7 +97,7 @@ class HubApi():
         path = f"repos/{owner}/{repo}/contents/{filepath}"
         body_dict = {
             "sha": sha,
-            "content": b64encode(contents).decode(),
+            "content": b64encode(content).decode(),
         }
         self._request_json(path, method="PUT", body=body_dict)
 
